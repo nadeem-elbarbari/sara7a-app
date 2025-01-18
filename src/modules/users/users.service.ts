@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
 import { RequestWithUser } from '../../middleware/auth.middleware';
 import { asyncHandler } from '../../utils/error/errorHandler';
-import { letsDecrypt } from '../../utils/security';
+import { letsDecrypt, letsEncrypt } from '../../utils/security';
 import User, { IUser } from '../../DB/models/user.model';
 
 export const getProfile = asyncHandler(async (req: RequestWithUser, res: Response, next: NextFunction) => {
@@ -18,7 +18,22 @@ export const updateProfile = asyncHandler(async (req: RequestWithUser, res: Resp
     const user = req.user;
     const data = req.body as IUser;
 
-    const updatedUser = await User.findByIdAndUpdate({ _id: user._id }, { $set: { ...data } }, { new: true }).exec();
+    if (Object.keys(data).length === 0) {
+        const error = new Error('please provide at least one field to update', { cause: 400 });
+        delete error.stack;
+        return next(error);
+    }
 
-    return res.status(200).json({ status: 'success', data: updatedUser });
+    if (data.phone) {
+        data.phone = letsEncrypt(data.phone);
+    }
+
+    const updatedUser = await User.findByIdAndUpdate({ _id: user._id }, data, {
+        new: true,
+        projection: { name: 1, email: 1, phone: 1, gender: 1 },
+    }).exec();
+
+    updatedUser.phone = letsDecrypt(updatedUser.phone);
+
+    return res.status(200).json({ status: 'success', message: 'profile updated', data: updatedUser });
 });

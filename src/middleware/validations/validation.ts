@@ -9,7 +9,7 @@ const validation = (schema: any) => {
         for (const key in schema) {
             const { error } = schema[key].validate(req[key], { abortEarly: false });
 
-            error && validationErrors.push({ key, error: error.details });
+            error && validationErrors.push({ path: key, error: error.details });
         }
 
         if (validationErrors.length > 0) {
