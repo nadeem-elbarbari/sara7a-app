@@ -11,13 +11,14 @@ enum Roles {
 }
 
 export interface IUser extends mongoose.Document {
-  name: string;
-  email: string;
-  password: string;
-  phone: string;
-  gender: Gender;
-  isConfirmed: boolean;
-  role: Roles;
+    name: string;
+    email: string;
+    password: string;
+    phone: string;
+    gender: Gender;
+    isConfirmed: boolean;
+    role: Roles;
+    confirmedAt?: Date;
 }
 
 const userSchema = new mongoose.Schema<IUser>(
@@ -58,6 +59,9 @@ const userSchema = new mongoose.Schema<IUser>(
       type: String,
       enum: Object.values(Roles),
       default: Roles.USER,
+    },
+    confirmedAt: {
+      type: Date,
     },
   },
   { timestamps: true, versionKey: false }
