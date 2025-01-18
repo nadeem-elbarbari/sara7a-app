@@ -11,7 +11,17 @@ export interface RequestWithUser extends Request {
 export const authentication = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const { authorization } = req.headers;
 
+    if (!authorization) {
+        const error = new Error('unauthorized access. token not found in header.', { cause: 401 });
+        return next(error);
+    }
+
     const [bearer, token] = authorization?.split(' ') as string[];
+
+    if (!bearer || !token) {
+        const error = new Error('invalid token or bearer.', { cause: 401 });
+        return next(error);
+    }
 
     let signature: string = '';
 
@@ -27,26 +37,28 @@ export const authentication = asyncHandler(async (req: Request, res: Response, n
 
     const payload = verifyToken(token, signature) as JwtPayload;
 
-    if (payload.error) {
-        let error = undefined;
-        switch (payload.error.name) {
-            case 'TokenExpiredError':
-                error = new Error('token expired', { cause: 401 });
-                return next(error);
-            case 'JsonWebTokenError':
-                error = new Error('invalid token', { cause: 401 });
-                return next(error);
-        }
-    }
-
-    const user = await User.findById(payload.id) as IUser | null;
+    const user = (await User.findById(payload.id)) as IUser | null;
 
     if (!user) {
         const error = new Error('user not found', { cause: 404 });
         return next(error);
     }
 
-    (req as RequestWithUser).user = user;
+    (req as RequestWithUser).user = user.toObject();
 
-    next();
+    return next();
 });
+
+export const authorization = (accessRoles: string[]) => {
+    return asyncHandler(async (req: RequestWithUser, res: Response, next: NextFunction) => {
+        const { role } = req.user;
+
+        if (!accessRoles.includes(role)) {
+            const error = new Error('unauthorized access', { cause: 403 });
+
+            return next(error);
+        }
+
+        return next();
+    });
+};

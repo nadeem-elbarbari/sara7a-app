@@ -1,6 +1,7 @@
 import e from 'express';
 import connectDB from '../DB/dbConnection';
 import cors from 'cors';
+import authRouter from './auth/auth.controller';
 import usersRouter from './users/users.controller';
 import { globalErrorHandler } from '../utils/error/errorHandler';
 
@@ -11,7 +12,8 @@ const bootstrap = (app: e.Application, express: typeof e) => {
   app.use(cors()); // enable cors
 
   // routes
-  app.use('/', usersRouter);
+  app.use('/auth', authRouter);
+  app.use('/users', usersRouter);
 
   // database
   connectDB();

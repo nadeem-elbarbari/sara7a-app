@@ -9,14 +9,17 @@ const router = Router();
 
 // * --------- get ----------
 
-router.get('/auth/verify/:token', usersService.verifyEmail);
+router.get('/verify/:token', usersService.verifyEmail);
 
 // ^ --------- post ----------
 
-router.post('/auth/signup', validation(schema.signUpSchema), usersService.signUp);
+router.post('/signup', validation(schema.signUpSchema), usersService.signUp);
 
-router.post('/auth/login', validation(schema.loginSchema), usersService.logIn);
+router.post('/login', validation(schema.loginSchema), usersService.logIn);
 
 // ! --------- delete ----------
 
 // ~ --------- patch ----------
+
+
+export default router;

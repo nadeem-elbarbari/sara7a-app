@@ -4,6 +4,7 @@ import User, { IUser } from '../../DB/models/user.model';
 import { generateToken, letsEncrypt, passwordComparing, passwordHashing, verifyToken } from '../../utils/security';
 import { sendEmail } from '../../utils/mail/sendEmail';
 import { JwtPayload } from 'jsonwebtoken';
+import emitter from '../../utils/events/emailEvent';
 
 export const signUp = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     // input validation
@@ -24,7 +25,7 @@ export const signUp = asyncHandler(async (req: Request, res: Response, next: Nex
     const encryptedPhone = letsEncrypt(data.phone);
 
     // user creation
-    const newUser = new User({
+    const newUser: IUser = new User({
         name: data.name,
         email: data.email,
         password: hashedPassword,
@@ -42,17 +43,7 @@ export const signUp = asyncHandler(async (req: Request, res: Response, next: Nex
     // email sending with confirmation link
     const link = `${req.protocol}://${req.get('host')}/auth/verify/${token}`;
 
-    sendEmail(
-        newUser.email,
-        'Signup confirmation',
-        `
-        <h1>Signup Confirmation 😂</h1>
-        <p style="font-size: 15px; font-weight: bold;">Hi ${newUser.name} 👋,</p>
-        <p style="font-size: 20px;">please click on the link below to confirm your account 👇</p>
-        <a href="${link}">${link}</a>
-        <p style="font-size: 25px; color: red; text-decoration: underline">⚠️ This link will expire in 24 hours</p>
-    `
-    );
+    emitter.emit('sendEmail', [newUser.email, link], newUser);
 
     return res
         .status(201)

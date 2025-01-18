@@ -1,18 +1,27 @@
+export interface IError extends Error {
+    validationErrors: object[];
+}
+
 const validation = (schema: any) => {
-  return (req: any, res: any, next: any) => {
-    const validationErrors = [];
+    return (req: any, res: any, next: any) => {
+        const validationErrors = [];
 
-    for (const key in schema) {
-      const { error } = schema[key].validate(req[key], { abortEarly: false });
-      error && validationErrors.push({ key, error: error.details });
-    }
+        for (const key in schema) {
+            const { error } = schema[key].validate(req[key], { abortEarly: false });
 
-    if (validationErrors.length > 0) {
-      return res.status(400).json({ validationErrors });
-    }
+            error && validationErrors.push({ key, error: error.details });
+        }
 
-    return next();
-  };
+        if (validationErrors.length > 0) {
+            const error = new Error('validation error', { cause: 400 }) as IError;
+
+            error.validationErrors = validationErrors;
+
+            return next(error);
+        }
+
+        return next();
+    };
 };
 
 export default validation;
