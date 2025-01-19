@@ -3,6 +3,7 @@ import connectDB from '../DB/dbConnection';
 import cors from 'cors';
 import authRouter from './auth/auth.controller';
 import usersRouter from './users/users.controller';
+import msgRouter from './messages/messages.controller';
 import { globalErrorHandler } from '../utils/error/errorHandler';
 
 const bootstrap = (app: e.Application, express: typeof e) => {
@@ -14,7 +15,7 @@ const bootstrap = (app: e.Application, express: typeof e) => {
   // routes
   app.use('/auth', authRouter);
   app.use('/users', usersRouter);
-
+  app.use('/messages', msgRouter)
   // database
   connectDB();
 
