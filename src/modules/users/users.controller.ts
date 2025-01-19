@@ -14,10 +14,16 @@ const router = Router();
 // parameters: Object.values(Roles) || ['user', 'admin'] || ['user']
 router.get('/profile', authentication, authorization(Object.values(Roles)), usersService.getProfile);
 
+router.get('/share/:id', validation(schema.shareProfile), usersService.shareProfile);
+
 // ^ --------- post ----------
 
-// ! --------- delete ----------
+router.post('/request-otp', validation(schema.requestOTP), usersService.requestOTP);
 
+router.post('/reset-password', validation(schema.resetPassword), usersService.resetPassword);
+
+// ! --------- delete ----------
+router.delete('/delete/:id', validation(schema.deleteProfile), authentication, usersService.softDelete);
 // ~ --------- patch ----------
 
 router.patch(
@@ -27,5 +33,7 @@ router.patch(
     authorization(Object.values(Roles)),
     usersService.updateProfile
 );
+
+router.patch('/update-password', validation(schema.changePassword), authentication, usersService.updatePassword);
 
 export default router;

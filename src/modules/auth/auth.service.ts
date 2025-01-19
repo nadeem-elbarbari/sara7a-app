@@ -38,12 +38,23 @@ export const signUp = asyncHandler(async (req: Request, res: Response, next: Nex
     await newUser.save();
 
     // confirmation token generation
-    const token = generateToken({ email: newUser.email }, process.env.CONFIRMATION_TOKEN!);
+    const token = generateToken({ email: newUser.email }, process.env.CONFIRMATION_TOKEN!, 1 * 60 * 60);
 
     // email sending with confirmation link
     const link = `${req.protocol}://${req.get('host')}/auth/verify/${token}`;
 
-    emitter.emit('sendEmail', [newUser.email, link], newUser);
+    emitter.emit(
+        'sendEmail',
+        newUser.email,
+        'Email Verification',
+        `
+            <h1>Signup Confirmation 😂</h1>
+            <p style="font-size: 15px; font-weight: bold;">Hi ${newUser.name} 👋,</p>
+            <p style="font-size: 20px;">please click on the link below to confirm your account 👇</p>
+            <a href="${link}">${link}</a>
+            <p style="font-size: 25px; color: red; text-decoration: underline">⚠️ This link will expire in 1 hours</p>
+        `
+    );
 
     return res
         .status(201)
@@ -70,14 +81,12 @@ export const verifyEmail = asyncHandler(async (req: Request, res: Response, next
     }
 
     // user confirmation
-    if (user.isConfirmed) {
+    if (user.isVerified) {
         const error = new Error('your account is already confirmed', { cause: 400 });
         return next(error);
     }
 
-    user.isConfirmed = true;
-    user.confirmedAt = new Date(Date.now());
-    await user.save();
+    await User.findByIdAndUpdate(user._id, { $set: { isVerified: true, confirmedAt: new Date(Date.now()) } });
 
     return res.status(200).json({ status: 'success', message: 'your account has been verified' });
 });
@@ -101,10 +110,18 @@ export const logIn = asyncHandler(async (req: Request, res: Response, next: Next
         return next(error);
     }
 
+    // user account activation
+    if (!user.isVerified) {
+        const error = new Error('verify your account first', { cause: 401 });
+        delete error.stack;
+        return next(error);
+    }
+
     // token generation
     const token = generateToken(
         { email: user.email, id: user._id },
-        user.role === 'admin' ? process.env.ADMIN_SIGNATURE! : process.env.USER_SIGNATURE!
+        user.role === 'admin' ? process.env.ADMIN_SIGNATURE! : process.env.USER_SIGNATURE!,
+        1 * 60 * 60
     );
 
     return res.status(200).json({ status: 'success', token });

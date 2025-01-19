@@ -12,7 +12,6 @@ export const asyncHandler = (fn: Function) => {
 };
 
 export const globalErrorHandler = (error: Error, req: Request, res: Response, next: NextFunction) => {
-    const statusCode: number = Number(error['cause']) || 500;
 
     let message: string = '';
 
@@ -20,19 +19,19 @@ export const globalErrorHandler = (error: Error, req: Request, res: Response, ne
         case 'JsonWebTokenError':
             message = 'Invalid token';
             error['cause'] = 401;
-            delete error.stack;
             break;
         case 'TokenExpiredError':
             message = 'Token expired';
             error['cause'] = 401;
-            delete error.stack;
             break;
         default:
             message = error.message;
     }
 
     if ((error as IError).validationErrors) {
-        return res.status(statusCode).json({ status: 'failed', message: message, errors: (error as IError).validationErrors });
+        return res
+            .status(error['cause'] as number)
+            .json({ status: 'failed', message: message, errors: (error as IError).validationErrors });
     }
 
     const errorResponse = {
@@ -41,5 +40,5 @@ export const globalErrorHandler = (error: Error, req: Request, res: Response, ne
         stack: error.stack,
     };
 
-    return res.status(statusCode).json(errorResponse);
+    return res.status(error['cause'] as number || 500).json(errorResponse);
 };

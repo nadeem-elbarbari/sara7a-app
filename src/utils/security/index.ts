@@ -17,8 +17,8 @@ export const letsDecrypt = (encrypted_text: string) => {
     return crypto.decrypt(encrypted_text);
 };
 
-export const generateToken = (payload: Object, signature: string) => {
-    return jwt.signToken(payload, signature);
+export const generateToken = (payload: Object, signature: string, expiresIn: string | number) => {
+    return jwt.signToken(payload, signature, expiresIn);
 };
 
 export const verifyToken = (token: string, signature: string) => {

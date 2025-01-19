@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
 export async function sendEmail(to: string, subject: string, html: string) {
     // send mail with defined transport object
     const info = await transporter.sendMail({
-        from: `"Signup confirmation" <${process.env.EMAIL}>`, // sender address
+        from: `"Sara7a Team" <${process.env.EMAIL}>`, // sender address
         to: to, // list of receivers
         subject: subject, // Subject line
         html: html, // html body

@@ -16,9 +16,11 @@ export interface IUser extends mongoose.Document {
     password: string;
     phone: string;
     gender: Gender;
-    isConfirmed: boolean;
+    isVerified: boolean;
     role: Roles;
     confirmedAt?: Date;
+    isDeleted?: boolean;
+    OTP?: string;
 }
 
 const userSchema = new mongoose.Schema<IUser>(
@@ -50,10 +52,9 @@ const userSchema = new mongoose.Schema<IUser>(
             required: true,
             lowercase: true,
         },
-        isConfirmed: {
+        isVerified: {
             type: Boolean,
             default: false,
-            lowercase: true,
         },
         role: {
             type: String,
@@ -62,6 +63,12 @@ const userSchema = new mongoose.Schema<IUser>(
         },
         confirmedAt: {
             type: Date,
+        },
+        isDeleted: {
+            type: Boolean,
+        },
+        OTP: {
+            type: String,
         },
     },
     { timestamps: true, versionKey: false }

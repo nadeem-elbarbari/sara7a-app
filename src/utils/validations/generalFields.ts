@@ -13,7 +13,13 @@ const generalFields = {
         .pattern(new RegExp(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/)),
     password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{8,16}$')),
     phone: Joi.string().pattern(new RegExp(/^(002|\+2)?01[0125][0-9]{8}$/)),
-    id: Joi.string().custom(customValidation),
+    id: Joi.string().custom(customValidation).messages({
+        'any.required': 'id is required',
+        'string.empty': 'id is required',
+        'string.base': 'id must be a type of ObjectId from MongoDB',
+        'string.custom': 'id must be a type of ObjectId from MongoDB',
+        'custom': 'id must be a type of ObjectId from MongoDB',
+    }),
     headers: Joi.object().keys({
         authorization: Joi.string().required().messages({
             'any.required': 'authorization is required',
