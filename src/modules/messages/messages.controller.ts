@@ -6,8 +6,8 @@ import { authentication } from '../../middleware/auth.middleware';
 
 const router = Router();
 
-router.post('/', validation(messageSchema), sendMessage);
+router.post('/send', validation(messageSchema), sendMessage);
 
-router.get('/', authentication, getMessages);
+router.get('/get', authentication, getMessages);
 
 export default router;

@@ -1,4 +1,5 @@
 import Joi from "joi";
+import generalFields from "../../utils/validations/generalFields";
 
 export const messageSchema = {
     body: Joi.object().keys({
@@ -8,9 +9,6 @@ export const messageSchema = {
             'string.max': 'content must be less than 255 characters',
             'string.min': 'content must be more than 1 character',
         }),
-        receiver: Joi.string().required().messages({
-            'any.required': 'receiver is required',
-            'string.base': 'receiver must be a string',
-        }),
+        userId: generalFields.id.required()
     }),
 };

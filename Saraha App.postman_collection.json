@@ -1,0 +1,336 @@
+{
+	"info": {
+		"_postman_id": "8a162aad-69dd-4b01-beca-6ceb8867cda3",
+		"name": "Saraha App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32070116"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Nadeem Ehab\",\n    \"email\": \"nadeem.elbarbari@gmail.com\",\n    \"password\": \"Abc12345\",\n    \"rePassword\": \"Abc12345\",\n    \"phone\": \"01234567890\",\n    \"gender\": \"male\",\n    \"role\": \"user\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/auth/signup",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"nadeem.elbarbari@gmail.com\",\r\n    \"password\": \"Abc12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/auth/login",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Forget Password",
+					"item": [
+						{
+							"name": "OTP Request",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"nadeem.elbarbari@gmail.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/users/request-otp",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"users",
+										"request-otp"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Reset Password",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"nadeem.elbarbari@gmail.com\",\n    \"otp\": \"8046\",\n    \"newPassword\": \"MickeyMouse\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BaseUrl}}/users/reset-password",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"users",
+										"reset-password"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Profile",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "user eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5hZGVlbS5lbGJhcmJhcmlAZ21haWwuY29tIiwiaWQiOiI2NzhhZmRmYjEwYjI0YmYwZTYzYjM4OGEiLCJpYXQiOjE3MzcxNjQwOTIsImV4cCI6MTczNzI1MDQ5Mn0.0BXnwmn27Z8xVkpYeEyFrlE1abseBDzUDhoDWCg5EVA",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "admin eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5hZGVlbS5lbGJhcmJhcmlAZ21haWwuY29tIiwiaWQiOiI2NzhkZWNiNzIxMTg5N2QxNjA1MWFkZTYiLCJpYXQiOjE3MzczNTQ3NjIsImV4cCI6MTczNzM1ODM2Mn0.l8rAdjpppO1HCf5DtwBTru13ZV3K8erefryEotbYL28",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BaseUrl}}/users/profile",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "admin eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5hZGVlbS5lbGJhcmJhcmlAZ21haWwuY29tIiwiaWQiOiI2NzhkZWNiNzIxMTg5N2QxNjA1MWFkZTYiLCJpYXQiOjE3MzczNTQ3NjIsImV4cCI6MTczNzM1ODM2Mn0.l8rAdjpppO1HCf5DtwBTru13ZV3K8erefryEotbYL28",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"hambozo\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/users/update",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"users",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Password",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "admin eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5hZGVlbS5lbGJhcmJhcmlAZ21haWwuY29tIiwiaWQiOiI2NzhkZWNiNzIxMTg5N2QxNjA1MWFkZTYiLCJpYXQiOjE3MzczNTQ3NjIsImV4cCI6MTczNzM1ODM2Mn0.l8rAdjpppO1HCf5DtwBTru13ZV3K8erefryEotbYL28",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"oldPassword\": \"Abc12345\",\n    \"password\": \"Abc123456789\",\n    \"rePassword\": \"Abc123456789\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/users/update-password",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"users",
+								"update-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "admin eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5hZGVlbS5lbGJhcmJhcmlAZ21haWwuY29tIiwiaWQiOiI2NzhjMDUwNjdjNzg2MmFhM2JkZGRkNjUiLCJpYXQiOjE3MzcyMzE3ODEsImV4cCI6MTczNzMxODE4MX0.44sYZ1XJoiT0_qUVCRuFdm6vRLHZ-os3iaZMGLSua-Y",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BaseUrl}}/users/delete/678c05067c7862aa3bdddd65",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"users",
+								"delete",
+								"678c05067c7862aa3bdddd65"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Share Profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseUrl}}/users/share/678decb7211897d16051ade6",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"users",
+								"share",
+								"678decb7211897d16051ade6"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Messages",
+			"item": [
+				{
+					"name": "Send",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"content\": \"Hello World\",\n    \"userId\": \"678decb7211897d16051ade6\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseUrl}}/messages/send",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"messages",
+								"send"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "admin eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5hZGVlbS5lbGJhcmJhcmlAZ21haWwuY29tIiwiaWQiOiI2NzhkZWNiNzIxMTg5N2QxNjA1MWFkZTYiLCJpYXQiOjE3MzczNTQ3NjIsImV4cCI6MTczNzM1ODM2Mn0.l8rAdjpppO1HCf5DtwBTru13ZV3K8erefryEotbYL28",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BaseUrl}}/messages/get",
+							"host": [
+								"{{BaseUrl}}"
+							],
+							"path": [
+								"messages",
+								"get"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "BaseUrl",
+			"value": "http://localhost:300",
+			"type": "default"
+		}
+	]
+}

@@ -1,8 +1,9 @@
 import mongoose, { Types } from "mongoose";
 
-interface IMessage {
+export interface IMessage extends mongoose.Document {
   content: string;
-  userId: Types.ObjectId
+  userId: Types.ObjectId,
+  createdAt?: string;
 }
 
 const msgSchema = new mongoose.Schema<IMessage>({
